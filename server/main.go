@@ -55,8 +55,10 @@ func main() {
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	<-ch
 
-	log.Printf("Shutting down server...")
+	log.Printf("Shutting down server gracefully...")
 
 	// Tell gRPC Server to stop processing requests and block till pending and in flight are finished
 	grpcServer.GracefulStop()
+
+	log.Printf("All connections drained, shutting down...")
 }
