@@ -4,8 +4,10 @@
 package echopb
 
 import (
+	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
 	math "math"
 )
 
@@ -63,7 +65,7 @@ func (m *EchoRequest) GetMessage() string {
 
 // Response message for Echoer.Echo
 type EchoResponse struct {
-	// The Echo
+	// The echo'd response
 	Reply                string   `protobuf:"bytes,1,opt,name=reply,proto3" json:"reply,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -120,4 +122,78 @@ var fileDescriptor_00212fb1f9d3bf1c = []byte{
 	0x22, 0x21, 0x43, 0x2e, 0x16, 0x10, 0x4b, 0x48, 0x58, 0x0f, 0x62, 0x93, 0x1e, 0x92, 0x35, 0x52,
 	0x22, 0xa8, 0x82, 0x10, 0x23, 0x93, 0xd8, 0xc0, 0x4e, 0x33, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff,
 	0xd8, 0xb8, 0x72, 0xa8, 0xa7, 0x00, 0x00, 0x00,
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// EchoerClient is the client API for Echoer service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type EchoerClient interface {
+	// RPC that echos any message that is passed in
+	Echo(ctx context.Context, in *EchoRequest, opts ...grpc.CallOption) (*EchoResponse, error)
+}
+
+type echoerClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewEchoerClient(cc *grpc.ClientConn) EchoerClient {
+	return &echoerClient{cc}
+}
+
+func (c *echoerClient) Echo(ctx context.Context, in *EchoRequest, opts ...grpc.CallOption) (*EchoResponse, error) {
+	out := new(EchoResponse)
+	err := c.cc.Invoke(ctx, "/echopb.Echoer/Echo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// EchoerServer is the server API for Echoer service.
+type EchoerServer interface {
+	// RPC that echos any message that is passed in
+	Echo(context.Context, *EchoRequest) (*EchoResponse, error)
+}
+
+func RegisterEchoerServer(s *grpc.Server, srv EchoerServer) {
+	s.RegisterService(&_Echoer_serviceDesc, srv)
+}
+
+func _Echoer_Echo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EchoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EchoerServer).Echo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/echopb.Echoer/Echo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EchoerServer).Echo(ctx, req.(*EchoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Echoer_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "echopb.Echoer",
+	HandlerType: (*EchoerServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Echo",
+			Handler:    _Echoer_Echo_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "api.proto",
 }
