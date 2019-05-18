@@ -17,7 +17,7 @@ func main() {
 	args := os.Args
 
 	// Create a new Echoer Client
-	echoerClient, err := echo.NewClient(":9000")
+	echoerClient, err := echo.NewClient("127.0.0.1:9000", true)
 	if err != nil {
 		log.Fatalf("Unable to create a new client: %v", err)
 	}

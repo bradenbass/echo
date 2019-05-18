@@ -35,7 +35,7 @@ func Test_e2e(t *testing.T) {
 	}()
 	defer grpcServer.Stop()
 
-	client, err := echo.NewClient(lis.Addr().String())
+	client, err := echo.NewClient(lis.Addr().String(), false)
 	if err != nil {
 		t.Fatalf("Unable to create a new client %v", err)
 	}
