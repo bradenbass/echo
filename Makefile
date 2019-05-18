@@ -9,3 +9,6 @@ go-test:
 go-server:
 	@echo "  >  Running server..."
 	go run server/main.go
+
+go-client:
+	go run client/main.go $$MESSAGE
