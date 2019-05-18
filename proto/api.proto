@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package echopb;
+
+// Request message for Echoer.Echo
+message EchoRequest {
+    // The message to echo
+    string message = 1;
+}
+
+// Response message for Echoer.Echo
+message EchoResponse {
+    // The echo'd response
+    string reply = 1;
+}
+
+// Service that echos back your message
+service Echoer {
+    // RPC that echos any message that is passed in
+    rpc Echo (EchoRequest) returns (EchoResponse);
+}
