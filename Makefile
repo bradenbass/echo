@@ -4,7 +4,7 @@ go-generate:
 
 go-test:
 	@echo "  >  Running tests..."
-	go test ./internal/...
+	go test ./internal/... ./e2e/...
 
 go-server:
 	@echo "  >  Running server..."

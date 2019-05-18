@@ -10,8 +10,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	"github.com/bradenbass/echo/internal/api"
-	echopb "github.com/bradenbass/echo/proto"
+	"github.com/bradenbass/echo/internal/entrypoint"
 )
 
 const (
@@ -24,14 +23,13 @@ func main() {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
-	// Create a new echo server
-	echoServer := api.NewEchoServer()
+	// Create a new gRPC Server with a maximum number of concurrent streams
+	grpcServer := grpc.NewServer(
+		grpc.MaxConcurrentStreams(10000),
+	)
 
-	// Create a new gRPC Server
-	grpcServer := grpc.NewServer()
-
-	// Register our implementation of the echo server onto the gRPC handler
-	echopb.RegisterEchoerServer(grpcServer, echoServer)
+	// Apply configuration onto gRPC server
+	entrypoint.NewAPIServer(grpcServer)
 
 	// Start Go Server
 	go func() {

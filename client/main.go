@@ -9,6 +9,7 @@ import (
 
 	"google.golang.org/grpc"
 
+	"github.com/bradenbass/echo/client/sdk"
 	echopb "github.com/bradenbass/echo/proto"
 )
 
@@ -16,7 +17,7 @@ func main() {
 	args := os.Args
 
 	// Create a new Echoer Client
-	echoerClient, err := createClient()
+	echoerClient, err := echo.NewClient(":9000")
 	if err != nil {
 		log.Fatalf("Unable to create a new client: %v", err)
 	}
@@ -34,13 +35,4 @@ func main() {
 		log.Fatalf("Error trying to send message to server: %v", err)
 	}
 	log.Printf("Received reply from server: %s", res.Reply)
-}
-
-func createClient() (echopb.EchoerClient, error) {
-	// Dial a new insecure connection
-	conn, err := grpc.Dial(":9000", grpc.WithInsecure())
-	if err != nil {
-		return nil, err
-	}
-	return echopb.NewEchoerClient(conn), nil
 }
