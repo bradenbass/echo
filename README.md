@@ -25,3 +25,15 @@ make go-client MESSAGE="hello"
 ```
 make go-test
 ```
+
+## Generating new TLS CA and Keys
+
+Install certstrap found here https://github.com/square/certstrap
+
+Delete the folder `tls` and remove existing certs and CA files
+
+```
+certstrap --depot-path "tls" init --common-name "Echo CA"
+certstrap --depot-path "tls" request-cert --common-name Client -ip "127.0.0.1"
+certstrap --depot-path "tls" sign Client --CA "Echo CA"
+```
