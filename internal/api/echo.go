@@ -9,6 +9,10 @@ import (
 	"github.com/bradenbass/echo/proto"
 )
 
+func NewEchoServer() *EchoServer {
+	return &EchoServer{}
+}
+
 type EchoServer struct {
 }
 
