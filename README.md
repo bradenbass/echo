@@ -1,6 +1,6 @@
 # gRPC Echo
 
-A go gRPC server that echos back any message you supply it
+A go gRPC server with mTLS (for encryption and authentication) that echos back any message you supply it
 
 # Requirements
 - Go 1.12
